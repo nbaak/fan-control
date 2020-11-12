@@ -33,16 +33,19 @@ old_temperature = 100
 
 ### some helper functions
 def fan_speed(speed):
+    global pwm
     pwm.ChangeDutyCycle(speed)
     global spinning 
     spinning = True
 
 def fan_start():
-    pwm.start(0)
-    global spinning 
+    global spinning
+    global pwm
+    pwm.start(0) 
     spinning = True
 
 def fan_stop():
+    global pwm
     pwm.stop()
     global spinning 
     spinning = False
