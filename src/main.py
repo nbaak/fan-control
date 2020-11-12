@@ -10,19 +10,18 @@ GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-PIN_FAN = 12 # pin 12, BOARD 18
+PIN_FAN = 18 # pin 12, BOARD 18
 
 TEMP_START = 24
 TEMP_STOP  = 22
 
 ### setup pwm
+FREQUENCY = 50
 PWM_MIN = 30
-PWM_MAX = 100
+PWM_MAX = 90
 
 GPIO.setup(PIN_FAN, GPIO.OUT)
-pwm = GPIO.PWM(PIN_FAN, PWM_MIN)
-pwm.start(0)
-pwm.stop()
+pwm = GPIO.PWM(PIN_FAN, FREQUENCY) # Pin, Hz
 
 ### setup duty
 pwm_cycle = 0
@@ -33,19 +32,17 @@ old_temperature = 100
 
 ### some helper functions
 def fan_speed(speed):
-    global pwm
     pwm.ChangeDutyCycle(speed)
     global spinning 
     spinning = True
 
 def fan_start():
     global spinning
-    global pwm
-    pwm.start(0) 
+    pwm.start(PWM_MIN) 
+    pwm.ChangeFrequency(FREQUENCY)  # don't know why, but now its working
     spinning = True
 
 def fan_stop():
-    global pwm
     pwm.stop()
     global spinning 
     spinning = False
@@ -61,16 +58,16 @@ while running:
     # not running
     if not spinning and current_temperature > TEMP_START:
         print ("START FAN!")
-        fan_start()   #100
+        fan_start()   # starts at min speed
         pwm_cycle = PWM_MIN
 
     if spinning and pwm_cycle <= PWM_MAX and pwm_cycle >= PWM_MIN:
-        if old_temperature < current_temperature:
+        if old_temperature <= current_temperature:
             pwm_cycle += 5
         elif current_temperature < old_temperature:
             pwm_cycle -= 1
         else:
-            pass
+            print ("do nothing")
 
         # stop on low temp
         if current_temperature < TEMP_STOP:
@@ -82,6 +79,7 @@ while running:
                 
             if pwm_cycle != old_pwm:
                 fan_speed(pwm_cycle)
+                
         else:
             print ("STOP FAN!")
             fan_stop()
@@ -89,7 +87,7 @@ while running:
     print (f"temp: {current_temperature}, pwm: {pwm_cycle}, spinning: {spinning}")
     old_temperature = current_temperature # old temperature
     old_pwm = pwm_cycle
-    sleep(1)
+    sleep(5)
 
 # to find an end
 pwm.stop()
