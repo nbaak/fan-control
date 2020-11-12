@@ -38,7 +38,7 @@ def fan_speed(speed):
     spinning = True
 
 def fan_start():
-    pwm.start(PWM_MIN)
+    pwm.start(0)
     global spinning 
     spinning = True
 
