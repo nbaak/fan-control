@@ -25,7 +25,7 @@ pwm.start(0)
 pwm.stop()
 
 ### setup duty
-pwm = 0
+pwm_cycle = 0
 old_pwm = 0
 running = True
 spinning = False
@@ -62,33 +62,33 @@ while running:
     if not spinning and current_temperature > TEMP_START:
         print ("START FAN!")
         fan_start()   #100
-        pwm = PWM_MIN
+        pwm_cycle = PWM_MIN
 
-    if spinning and pwm <= PWM_MAX and pwm >= PWM_MIN:
+    if spinning and pwm_cycle <= PWM_MAX and pwm_cycle >= PWM_MIN:
         if old_temperature < current_temperature:
-            pwm += 5
+            pwm_cycle += 5
         elif current_temperature < old_temperature:
-            pwm -= 1
+            pwm_cycle -= 1
         else:
             pass
 
         # stop on low temp
         if current_temperature < TEMP_STOP:
-            pwm = 0
+            pwm_cycle = 0
 
-        if pwm >= PWM_MIN:
-            if pwm > PWM_MAX:
-                pwm = PWM_MAX # pwm max is 100!
+        if pwm_cycle >= PWM_MIN:
+            if pwm_cycle > PWM_MAX:
+                pwm_cycle = PWM_MAX # pwm max is 100!
                 
-            if pwm != old_pwm:
-                fan_speed(pwm)
+            if pwm_cycle != old_pwm:
+                fan_speed(pwm_cycle)
         else:
             print ("STOP FAN!")
             fan_stop()
 
     print (f"temp: {current_temperature}, pwm: {pwm}, spinning: {spinning}")
     old_temperature = current_temperature # old temperature
-    old_pwm = pwm
+    old_pwm = pwm_cycle
     sleep(1)
 
 # to find an end
