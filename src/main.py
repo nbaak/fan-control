@@ -86,7 +86,7 @@ while running:
             print ("STOP FAN!")
             fan_stop()
 
-    print (f"temp: {current_temperature}, pwm: {pwm}, spinning: {spinning}")
+    print (f"temp: {current_temperature}, pwm: {pwm_cycle}, spinning: {spinning}")
     old_temperature = current_temperature # old temperature
     old_pwm = pwm_cycle
     sleep(1)
