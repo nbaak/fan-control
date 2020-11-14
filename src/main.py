@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-import termios, tty, sys, os
-
-#from gpiozero import CPUTemperature #pip
-
 from tmp102 import tmp102
 from RPi_PWM import RPi_PWM
 
@@ -37,7 +33,6 @@ while running:
 
     # not running
     if not pwm.is_running() and current_temperature > TEMP_START:
-        print ("START FAN!")
         pwm.start(PWM_MIN)   # starts at min speed
 
     if pwm.is_running():
@@ -52,12 +47,12 @@ while running:
 
         # stop on low temp
         if current_temperature <= TEMP_STOP:
-            fan_stop()
+            pwm.stop()
 
     print (f"temp: {current_temperature:.4f}, pwm: {pwm.cycle}, fan running: {pwm.is_running()}")
     old_temperature = current_temperature # old temperature
     sleep(10)
 
 # to find an end
-pwm.stop()
+pwm.terminate()
 

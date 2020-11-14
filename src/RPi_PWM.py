@@ -21,9 +21,7 @@ class RPi_PWM:
         
         self.cycle = 0
         
-        
-        
-        
+    
     @property
     def cycle(self):
         return self.__cycle
@@ -52,12 +50,6 @@ class RPi_PWM:
         if self.is_running():
             self.pwm.stop()
             self.pulsing = False
-    
-    
-    def set_pwm_signal(self, cycle):
-        if self.is_running():
-            self.cycle = cycle
-            self.pwm.ChangeDutyCycle(self.cycle)   
             
     def update_pwm_signal(self):
         if self.is_running():
