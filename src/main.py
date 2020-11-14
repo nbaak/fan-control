@@ -25,7 +25,6 @@ pwm = GPIO.PWM(PIN_FAN, FREQUENCY) # Pin, Hz
 
 ### setup duty
 pwm_cycle = 0
-old_pwm = 0
 running = True
 spinning = False
 old_temperature = 100
@@ -61,33 +60,26 @@ while running:
         fan_start()   # starts at min speed
         pwm_cycle = PWM_MIN
 
-    if spinning and pwm_cycle <= PWM_MAX and pwm_cycle >= PWM_MIN:
-        if old_temperature <= current_temperature:
+    if spinning:
+        if old_temperature <= current_temperature and pwm_cycle < PWM_MAX:
             pwm_cycle += 5
-        elif current_temperature < old_temperature:
+            
+            if pwm_cycle > PWM_MAX:
+                pwm_cycle = PWM_MAX
+            
+        elif current_temperature < old_temperature and pwm_cycle > PWM_MIN:
             pwm_cycle -= 1
+            
         else:
-            print ("do nothing")
+            pass
 
         # stop on low temp
-        if current_temperature < TEMP_STOP:
-            pwm_cycle = 0
-
-        if pwm_cycle >= PWM_MIN:
-            if pwm_cycle > PWM_MAX:
-                pwm_cycle = PWM_MAX # pwm max is 100!
-                
-            if pwm_cycle != old_pwm:
-                fan_speed(pwm_cycle)
-                
-        else:
-            print ("STOP FAN!")
+        if current_temperature <= TEMP_STOP:
             fan_stop()
 
     print (f"temp: {current_temperature}, pwm: {pwm_cycle}, spinning: {spinning}")
     old_temperature = current_temperature # old temperature
-    old_pwm = pwm_cycle
-    sleep(5)
+    sleep(10)
 
 # to find an end
 pwm.stop()
