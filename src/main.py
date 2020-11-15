@@ -36,14 +36,14 @@ while running:
         pwm.start(PWM_MIN)   # starts at min speed
 
     if pwm.is_running():
-        if old_temperature <= current_temperature and pwm.cycle < PWM_MAX:
+        if old_temperature < current_temperature and pwm.cycle < PWM_MAX:
             pwm.cycle += 5
             
         elif current_temperature < old_temperature and pwm.cycle > PWM_MIN:
             pwm.cycle -= 1
             
         else:
-            pass
+            pwm.cycle += 1
 
         # stop on low temp
         if current_temperature <= TEMP_STOP:
