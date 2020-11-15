@@ -8,6 +8,7 @@ fi
 
 docker rm -f fan
 docker run -it --privileged \
-    -v "${THIS_DIR}/src":/fan_control \
+    -v "${THIS_DIR}/src":/fan \
     --name fan \
-    -d k3nny/fancontrol
+    -d k3nny0r/rpi-python \
+    python3.8 /fan/main.py
