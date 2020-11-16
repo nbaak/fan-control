@@ -1,10 +1,29 @@
 #!/usr/bin/env python3
 
 from tmp102 import tmp102
-from RPi_PWM import RPi_PWM
+from lib.RPi_PWM import RPi_PWM
 
-from time import sleep
+from time import sleep, time
 
+import argparse
+
+def str2bool(value):
+    if isinstance(value, bool):
+        return value
+    
+    if value.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif value.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+parser = argparse.ArgumentParser(description="Fan Controler")
+parser.add_argument('--debug', dest='DEBUG', type=str2bool, default=True)
+
+args = parser.parse_args()
+
+DEBUG = args.DEBUG
 
 PIN_FAN = 18 # pin 12, BOARD 18
 
@@ -30,10 +49,13 @@ def get_temp():
 ### do the job
 while running:
     current_temperature = get_temp() # current temperature
+    t = time.localtime()
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", t)
 
     # not running
     if not pwm.is_running() and current_temperature > TEMP_START:
         pwm.start(PWM_MIN)   # starts at min speed
+        print (f"{current_time} - fan started")
 
     if pwm.is_running():
         if old_temperature < current_temperature and pwm.cycle < PWM_MAX:
@@ -48,8 +70,11 @@ while running:
         # stop on low temp
         if current_temperature <= TEMP_STOP:
             pwm.stop()
-
-    print (f"temp: {current_temperature:.4f}, pwm: {pwm.cycle}, fan running: {pwm.is_running()}")
+            print (f"{current_time} - fan stopped")
+    
+    if DEBUG:
+        print (f"{current_time} - temp: {current_temperature:.4f}, pwm: {pwm.cycle}, fan running: {pwm.is_running()}")
+        
     old_temperature = current_temperature # old temperature
     sleep(10)
 
