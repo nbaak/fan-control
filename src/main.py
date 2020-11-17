@@ -3,7 +3,7 @@
 from tmp102 import tmp102
 from lib.RPi_PWM import RPi_PWM
 
-from time import sleep, time
+import time
 
 import argparse
 
@@ -49,13 +49,13 @@ def get_temp():
 ### do the job
 while running:
     current_temperature = get_temp() # current temperature
-    t = time.localtime()
-    current_time = time.strftime("%Y-%m-%d %H:%M:%S", t)
+
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     # not running
     if not pwm.is_running() and current_temperature > TEMP_START:
         pwm.start(PWM_MIN)   # starts at min speed
-        print (f"{current_time} - fan started")
+        print (f"{current_time} - Fan started")
 
     if pwm.is_running():
         if old_temperature < current_temperature and pwm.cycle < PWM_MAX:
@@ -70,13 +70,13 @@ while running:
         # stop on low temp
         if current_temperature <= TEMP_STOP:
             pwm.stop()
-            print (f"{current_time} - fan stopped")
+            print (f"{current_time} - Fan stopped")
     
     if DEBUG:
-        print (f"{current_time} - temp: {current_temperature:.4f}, pwm: {pwm.cycle}, fan running: {pwm.is_running()}")
+        print (f"{current_time} - temp: {current_temperature:.4f}, pwm: {pwm.cycle}, Fan running: {pwm.is_running()}")
         
     old_temperature = current_temperature # old temperature
-    sleep(10)
+    time.sleep(10)
 
 # to find an end
 pwm.terminate()
