@@ -11,7 +11,7 @@ def get_temp():
 class Fan():
 
 
-    def __init__(self):
+    def __init__(self, debug = True):
         self.PIN_FAN = 18
         self.TEMP_START = 24
         self.TEMP_STOP = 22
@@ -27,8 +27,10 @@ class Fan():
         self.current_temperature = 0
         self.old_temperature = 100
         
-        
         self.fan_running = True
+        
+        self.sleep_time = 10
+        self.DEBUG = debug
    
     
     def run (self):
@@ -58,6 +60,8 @@ class Fan():
             
             if self.DEBUG:
                 print (f"{current_time} - temp: {self.current_temperature:.4f}, pwm: {self.pwm.cycle}, fan running: {self.pwm.is_running()}")
+                
+            time.sleep(self.sleep_time)
         
         self.stop()
 
