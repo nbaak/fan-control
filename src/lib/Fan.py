@@ -21,16 +21,21 @@ class Fan():
         self.PWM_MIN = 40
         self.PWM_MAX = 90
         
-        self.pwm = RPi_PWM(self.PIN_FAN, self.FREQUENCY, self.PWM_MIN, self.PWM_MAX, self.PWM_MIN)
+        self.pwm = None
+        self.setup_gpio()
         
         ### setup duty
         self.current_temperature = 0
         self.old_temperature = 100
         
-        self.fan_running = True
+        self.fan_running = False
         
         self.sleep_time = 10
         self.DEBUG = debug
+        
+    def setup_gpio(self):
+        if not self.pwm:
+            self.pwm = RPi_PWM(self.PIN_FAN, self.FREQUENCY, self.PWM_MIN, self.PWM_MAX, self.PWM_MIN)
    
     
     def run (self):
@@ -44,10 +49,10 @@ class Fan():
                 print (f"{current_time} - fan started")
         
             if self.pwm.is_running():
-                if self.old_temperature < self.current_temperature and self.pwm.cycle < self.PWM_MAX:
+                if self.old_temperature < self.current_temperature:
                     self.pwm.cycle += 5
                     
-                elif self.current_temperature < self.old_temperature and self.pwm.cycle > self.PWM_MIN:
+                elif self.current_temperature < self.old_temperature:
                     self.pwm.cycle -= 1
                     
                 else:
@@ -61,22 +66,40 @@ class Fan():
             if self.DEBUG:
                 print (f"{current_time} - temp: {self.current_temperature:.4f}, pwm: {self.pwm.cycle}, fan running: {self.pwm.is_running()}")
                 
+            self.old_temperature = self.current_temperature
             time.sleep(self.sleep_time)
         
+        print (f"{current_time} - fan stopped")
         self.stop()
 
     def start(self):
-        self.fan_running = True
-        self.run()
+        if not self.fan_running:
+            self.setup_gpio()
+            self.fan_running = True
+            self.run()
 
     def stop(self):
-        self.fan_running = False
-        self.pwm.stop()
-        self.pwm.terminate()
+        if self.fan_running:
+            self.fan_running = False
+            self.pwm.stop()
 
+    def is_service_running(self):
+        return self.fan_running
+    
+    def is_fan_running(self):
+        return self.pwm.is_running()
 
     def get_current_temperature(self):
         return self.current_temperature          
 
+    def get_current_pwm_signal(self):
+        if self.pwm.cycle:
+            return self.pwm.cycle
+        else:
+            return -1
+        
+        
+    def terminate(self):
+        self.pwm.terminate()
 
 
