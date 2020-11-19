@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Fan Control{% endblock %}
+
+{% block content %}
+<div class="headline"><b>Fan Control Center</b></div>
+
+<div>
+	<div class="valuecontainer">
+		<span class="label">Service running</span><span class="value" data-src="/api/get/service-status" data-interval="5000" id="servicestatus">service</span>
+	</div>
+
+	<div class="valuecontainer">
+		<span class="label">Fan running</span><span class="value" data-src="/api/get/fan-status" data-interval="5000" id="fanstatus">fan</span>
+	</div>
+	
+	<div class="valuecontainer">
+		<span class="label">Temperature</span><span class="value" data-src="/api/get/temperature" data-interval="5000" id="temperature">temp</span>
+	</div>
+	
+	<div class="valuecontainer">
+		<span class="label">PWM Signal</span><span class="value" data-src="/api/get/pwm" data-interval="5000" id="pwm">pwm</span>
+	</div>
+
+</div>
+{% endblock %}

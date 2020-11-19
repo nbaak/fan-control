@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-from flask import Flask
+from flask import Flask, render_template, request
 from lib.Fan import Fan
 import argparse
 import threading
+from aiohttp.client import request
 
 def str2bool(value):
     if isinstance(value, bool):
@@ -32,7 +33,27 @@ fan = Fan(debug = DEBUG)
 def fan_worker():
     global fan
     fan.start()
+    
+@app.route("/api/get/temperature")
+def api_get_temperature():
+    return fan.get_current_temperature()
 
+@app.route("/api/get/service-status")
+def api_get_service():
+    return fan.is_service_running()
+
+@app.route("/api/get/fan-status")
+def api_get_fan_status():
+    return fan.is_fan_running()
+
+@app.route("/api/get/pwm", methods=["GET"])
+def api_pwm():
+    if request.method == "GET":        
+        return fan.get_current_pwm_signal()
+    
+    else:
+        pass
+    
 
 @app.route("/start")
 def start():
@@ -52,14 +73,14 @@ def stop():
         return "stop"
     else:
         return "not running"
-
-@app.route("/status")
-def status():
-    return f"Service active: {fan.is_service_running()}<br>Fan running: {fan.is_fan_running()}<br>temperature: {fan.get_current_temperature()}<br>pwm signal: {fan.get_current_pwm_signal()}"
+    
+@app.route("/test")
+def test():
+    return render_template("index.html")
 
 @app.route("/")
 def main():
-    return "MAIN"
+    return f"Service active: {fan.is_service_running()}<br>Fan running: {fan.is_fan_running()}<br>temperature: {fan.get_current_temperature()}<br>pwm signal: {fan.get_current_pwm_signal()}"
 
 
 if __name__ == "__main__":
