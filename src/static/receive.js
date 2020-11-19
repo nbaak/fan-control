@@ -4,15 +4,20 @@
  */
 console = window.console;
 
-$('#logBox').ready(function(){
-	var ele = $('#logBox');
-	var src = ele.data("src");
-	var interval = ele.data("interval");
+function updateElement(elementId) {
+    var element = $(elementId);
+    var src = element.data("src");
+    
+    console.log(src);
+    $(elementId).load(src);
+}
+
+$(document).ready(function(){
+	//var interval = ele.data("interval");
 	
 	console.log(src);
 	setInterval(function(){
-		$('#logBox').load(src);
-		$('#logBox').scrollTop(250);
-	}, interval);
+        updateElement('#servicestatus');
+	}, 5000);
 	
 });

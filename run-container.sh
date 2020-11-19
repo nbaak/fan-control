@@ -7,6 +7,7 @@ if [ ! -d ./data ]; then
 fi
 
 docker stop fan
+./src/stop.py
 docker rm fan
 docker run -it --privileged \
     -p 8888:8888 \

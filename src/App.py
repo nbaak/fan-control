@@ -36,20 +36,20 @@ def fan_worker():
     
 @app.route("/api/get/temperature")
 def api_get_temperature():
-    return fan.get_current_temperature()
+    return str(fan.get_current_temperature())
 
 @app.route("/api/get/service-status")
 def api_get_service():
-    return fan.is_service_running()
+    return str(fan.is_service_running())
 
 @app.route("/api/get/fan-status")
 def api_get_fan_status():
-    return fan.is_fan_running()
+    return str(fan.is_fan_running())
 
 @app.route("/api/get/pwm", methods=["GET"])
 def api_pwm():
     if request.method == "GET":        
-        return fan.get_current_pwm_signal()
+        return str(fan.get_current_pwm_signal())
     
     else:
         pass
