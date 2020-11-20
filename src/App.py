@@ -47,13 +47,8 @@ def api_get_fan_status():
     return str(fan.is_fan_running())
 
 @app.route("/api/get/pwm", methods=["GET"])
-def api_pwm():
-    if request.method == "GET":        
-        return str(fan.get_current_pwm_signal())
-    
-    else:
-        pass
-    
+def api_pwm():        
+    return str(fan.get_current_pwm_signal())
 
 @app.route("/start")
 def start():

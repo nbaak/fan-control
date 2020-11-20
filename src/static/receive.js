@@ -4,20 +4,23 @@
  */
 console = window.console;
 
-function updateElement(elementId) {
-    var element = $(elementId);
-    var src = element.data("src");
-    
-    console.log(src);
-    $(elementId).load(src);
+function updateElement(ele) {
+    console.log(ele);
+    var src = ele.dataset.src;  // wonky stuff
+    $(ele).load(src);
 }
 
-$(document).ready(function(){
+$('#values').ready(function(){
 	//var interval = ele.data("interval");
 	
-	console.log(src);
 	setInterval(function(){
-        updateElement('#servicestatus');
+        var elements = document.getElementsByClassName("value");
+        
+        for (element in elements){  // I really don't like JS for-each the element is just the index of the element..
+            console.log("element:" + element);
+            updateElement(elements[element]);
+        }
+             
 	}, 5000);
 	
 });
