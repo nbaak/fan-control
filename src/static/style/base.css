@@ -1,10 +1,40 @@
+
+#content{
+    left: 20px;
+    position: relative;
+}
+
+.headline {
+    padding-bottom: 15px;
+}
+
+.section {
+    padding-bottom: 10px;
+}
+
+
 .label {
-    display: 'inline-block';
+    display: inline-block;
     width: 200px;
 }
 
 .value {
-    display: 'inline-block';
-    font-style: 'italic';
-    font-weight: 'bold';
+    display: inline-block;
+    font-style: italic;
+    font-weight: bold;
+}
+
+
+.button {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+
+#control-start {
+    background: #dcdcdc;
+}
+
+#control-stop {
+    background: #d40404;
 }

@@ -98,6 +98,63 @@ class Fan():
         else:
             return -1
         
+    def get_start_temperature(self):
+        return self.TEMP_START
+    
+    def get_stop_temperature(self):
+        return self.TEMP_STOP
+    
+    def get_min_pwm(self):
+        return self.pwm.min_cycle
+    
+    def get_max_pwm(self):
+        return self.pwm.max_cycle
+    
+    def get_start_pwm(self):
+        return self.pwm.start_cycle
+    
+    
+    def set_start_temperature(self, temp):
+        try:
+            value = float(temp)
+            self.TEMP_START = value
+            
+        except:
+            pass
+    
+    def set_stop_temperature(self, temp):
+        try:
+            value = float(temp)
+            self.TEMP_STOP = value
+            
+        except:
+            pass
+    
+    def set_min_pwm(self, sig):
+        try:
+            value = int(sig)
+            self.pwm.min_pwm = value
+            
+        except:
+            pass
+    
+    def set_max_pwm(self, sig):
+        try:
+            value = int(sig)
+            self.pwm.max_pwm = value
+            
+        except:
+            pass
+    
+    def set_start_pwm(self, sig):
+        try:
+            value = int(sig)
+            self.pwm.start_pwm = value
+            
+        except:
+            pass
+    
+    
         
     def terminate(self):
         self.pwm.terminate()

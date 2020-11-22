@@ -4,7 +4,7 @@
 {% block content %}
 <div class="headline"><b>Fan Control Center</b></div>
 
-<div data-interval="5000" >
+<div id="values" class="section">
 	<div class="valuecontainer">
 		<span class="label">Service running</span><span class="value" data-src="/api/get/service-status" id="servicestatus">service</span>
 	</div>
@@ -14,12 +14,20 @@
 	</div>
 	
 	<div class="valuecontainer">
-		<span class="label">Temperature</span><span class="value" data-src="/api/get/temperature" id="temperature">temp</span>
+		<span class="label">Temperature</span><span class="value" data-src="/api/get/temperature" id="temperature">temp</span>°C
 	</div>
 	
 	<div class="valuecontainer">
 		<span class="label">PWM Signal</span><span class="value" data-src="/api/get/pwm" id="pwm">pwm</span>
 	</div>
-
 </div>
+
+<div id="controls" class="section">
+    
+    <div id ="control-status-running"></div>
+    <div class="button control" id="control-start" data-command="start">Start</div>
+    <div class="button control" id="control-stop"  data-command="stop" >Stop</div>
+    
+</div>
+
 {% endblock %}

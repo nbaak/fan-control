@@ -16,9 +16,9 @@ $('#values').ready(function(){
 	setInterval(function(){
         var elements = document.getElementsByClassName("value");
         
-        for (element in elements){  // I really don't like JS for-each the element is just the index of the element..
-            console.log("element:" + element);
-            updateElement(elements[element]);
+        for (i = 0; i<elements.length; i++){  // I really don't like JS for-each the element is just the index of the element..
+            //console.log("element:" + elements[i]);
+            updateElement(elements[i]);
         }
              
 	}, 5000);
