@@ -90,7 +90,7 @@ class Fan():
         return self.pwm.is_running()
 
     def get_current_temperature(self):
-        return self.current_temperature          
+        return get_temp()          
 
     def get_current_pwm_signal(self):
         if self.pwm.cycle:

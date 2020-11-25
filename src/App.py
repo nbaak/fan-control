@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 from lib.Fan import Fan
 import argparse
 import threading
+import logging
 
 def str2bool(value):
     if isinstance(value, bool):
@@ -16,16 +17,24 @@ def str2bool(value):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
+# Args
 parser = argparse.ArgumentParser(description="Fan Controler")
 parser.add_argument('--debug', dest='DEBUG', type=str2bool, default=True)
 
 args = parser.parse_args()
-
-
-app = Flask(__name__)
-
 DEBUG = args.DEBUG
 
+  
+# App
+app = Flask(__name__)
+log = logging.getLogger('werkzeug')
+log.diabled = True
+log.setLevel(logging.ERROR)
+
+app.logger.disabled = True
+
+
+# Fan
 fan = Fan(debug = DEBUG)
     
 
@@ -77,7 +86,6 @@ def api_post_service():
             return 'ERROR'
     
 
-@app.route("/start")
 def start():
     if not fan.is_service_running():        
         t = threading.Thread(target=t_fan_worker)
