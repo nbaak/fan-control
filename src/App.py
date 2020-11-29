@@ -84,6 +84,24 @@ def api_post_service():
             
         else:
             return 'ERROR'
+        
+        
+@app.route("/api/post/start-stop-temperatures", methods=["POST"])
+def api_post_start_stop_temperatures():
+    if request.method == "POST":
+        command = request.form["command"]
+        value = request.form["value"]
+        
+        print (f"command: {command}, value: {value}")
+        
+        if command == "start":
+            fan.set_start_temperature(value)
+            return fan.START_TEMP
+        elif command == "stop":
+            fan.set_stop_temperature(value)
+            return fan.STOP_TEMP
+        else:
+            return "ERROR"
     
 
 def start():

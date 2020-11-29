@@ -25,16 +25,27 @@
 }
 
 
+.temp-value {
+    display: inline-block;
+    width: 100px;
+}
+
+.temp-input {
+    width: 100px;
+}
+
 .button {
     display: inline-block;
     width: 100px;
     text-align: center;
+    cursor: pointer;
 }
 
-#control-start {
+.control-send,
+.control-start {
     background: #dcdcdc;
 }
 
-#control-stop {
+.control-stop {
     background: #d40404;
 }

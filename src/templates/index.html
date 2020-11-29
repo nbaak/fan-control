@@ -6,28 +6,42 @@
 
 <div id="values" class="section">
 	<div class="valuecontainer">
-		<span class="label">Service running</span><span class="value" data-src="/api/get/service-status" id="servicestatus">service</span>
+		<span class="label">Service running</span><span class="value update" data-src="/api/get/service-status" id="servicestatus">service</span>
 	</div>
 
 	<div class="valuecontainer">
-		<span class="label">Fan running</span><span class="value" data-src="/api/get/fan-status" id="fanstatus">fan</span>
+		<span class="label">Fan running</span><span class="value update" data-src="/api/get/fan-status" id="fanstatus">fan</span>
 	</div>
 	
 	<div class="valuecontainer">
-		<span class="label">Temperature</span><span class="value" data-src="/api/get/temperature" id="temperature">temp</span>°C
+		<span class="label">Temperature</span><span class="value update" data-src="/api/get/temperature" id="temperature">temp</span>°C
 	</div>
 	
 	<div class="valuecontainer">
-		<span class="label">PWM Signal</span><span class="value" data-src="/api/get/pwm" id="pwm">pwm</span>
+		<span class="label">PWM Signal</span><span class="value update" data-src="/api/get/pwm" id="pwm">pwm</span>
 	</div>
 </div>
 
-<div id="controls" class="section">
-    
+<div id="control-start-stop" class="section">    
     <div id ="control-status-running"></div>
-    <div class="button control" id="control-start" data-command="start">Start</div>
-    <div class="button control" id="control-stop"  data-command="stop" >Stop</div>
-    
+    <div class="button control control-stop"  id="control-stop"  data-command="stop" >Stop</div>
+    <div class="button control control-start" id="control-start" data-command="start">Start</div>      
 </div>
+
+<div id="control-edge-temperatures" class="section">
+    <div>
+        <div class="temp-value"><span id="old-stop-value"  class="value update-slow" data-src="/api/get/stop-temperature">stop</span>°C</div>
+        <div class="temp-value"><span id="old-start-value" class="value update-slow" data-src="/api/get/start-temperature">start</span>°C</div>
+    </div>
+    
+    <div class="new-values">
+        <input type="number" class="temp-input" id="new-stop-value" name="new-stop-value" min="10" max="60">
+        <input type="number" class="temp-input" id="new-start-value" name="new-start-value" min="10" max="60">
+        <div id="new-values-status"></div>
+        <div class="button control-send" id="new-start-stop">send</div>
+    </div>
+
+</div>
+
 
 {% endblock %}
