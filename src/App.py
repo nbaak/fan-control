@@ -96,10 +96,10 @@ def api_post_start_stop_temperatures():
         
         if command == "start":
             fan.set_start_temperature(value)
-            return fan.START_TEMP
+            return "start temperature updated"
         elif command == "stop":
             fan.set_stop_temperature(value)
-            return fan.STOP_TEMP
+            return "stop temperature updated"
         else:
             return "ERROR"
     
@@ -109,7 +109,7 @@ def start():
         t = threading.Thread(target=t_fan_worker)
         t.start()
         
-        return "start"
+        return "started"
         
     else:
         return "already running"
@@ -117,7 +117,7 @@ def start():
 def stop():
     if fan.is_service_running():
         fan.stop()
-        return "stop"
+        return "stoped"
     else:
         return "not running"
     

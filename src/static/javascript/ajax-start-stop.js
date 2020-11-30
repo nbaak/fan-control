@@ -15,7 +15,7 @@ $('#controls').ready(function(){
                 // set status
 				window.console.log("send: "+command+" to" +_url);
                 window.console.log("recv: "+msg);
-                $('#control-status-running').innerHTML = msg;
+                $('#control-status-running')[0].innerHTML = msg;
 			}
 		});
 	});

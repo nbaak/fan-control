@@ -29,14 +29,23 @@
 </div>
 
 <div id="control-edge-temperatures" class="section">
-    <div>
-        <div class="temp-value"><span id="old-stop-value"  class="value update-slow" data-src="/api/get/stop-temperature">stop</span>°C</div>
-        <div class="temp-value"><span id="old-start-value" class="value update-slow" data-src="/api/get/start-temperature">start</span>°C</div>
-    </div>
     
     <div class="new-values">
-        <input type="number" class="temp-input" id="new-stop-value" name="new-stop-value" min="10" max="60">
-        <input type="number" class="temp-input" id="new-start-value" name="new-start-value" min="10" max="60">
+    
+        <div class="input-container">
+            <input type="number" class="temp-input" id="new-stop-value" name="new-stop-value" min="10" max="60" data-src="/api/get/stop-temperature">
+            <div class="unit">
+                <span> °C</span>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="number" class="temp-input" id="new-start-value" name="new-start-value" min="10" max="60" data-src="/api/get/start-temperature">
+            <div class="unit">
+                <span> °C</span>
+            </div>
+        </div>
+        
         <div id="new-values-status"></div>
         <div class="button control-send" id="new-start-stop">send</div>
     </div>

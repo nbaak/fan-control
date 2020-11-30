@@ -31,7 +31,26 @@
 }
 
 .temp-input {
-    width: 100px;
+    width: 75px;
+    text-align: right;
+    border-color: black;
+    border-width: thin;
+    padding: 2px;
+}
+
+.input-container {
+    display: inline-block;
+}
+
+.unit {
+    display: inline-block;
+    width: 25px;
+    padding: 2px;
+    margin-left: -5px;
+    border-top: solid;
+    border-right: solid;
+    border-bottom: solid;
+    border-width: thin;    
 }
 
 .button {

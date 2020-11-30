@@ -33,35 +33,34 @@ function validate_values(min, max) {
 
 $('#control-edge-temperatures').ready(function(){
     
-    
-    // TODO: make this work.. if the page show up initialy, values should be set in input box
-    $('#new-start-value').ready(function(){
-        $('#old-start-value').ready(function(){
-            document.getElementById('new-start-value').value = parseFloat(document.getElementById('old-start-value').innerText);
-            window.console.log('start ' + document.getElementById('old-start-value').innerText);
-        });      
+    $('#new-start-value').ready(function(){        
+        var url = $('#new-start-value').data("src");        
+        $.get(url, function(data) {
+            $('#new-start-value')[0].value = parseFloat(data);
+        });
     });
     
-    $('#new-stop-value').ready(function(){
-        $('#old-stop-value').ready(function(){
-            document.getElementById('new-stop-value').value = parseFloat(document.getElementById('old-stop-value').innerText);
-            window.console.log('stop ' + document.getElementById('old-stop-value').innnerText);
-        });        
+    $('#new-stop-value').ready(function(){        
+        var url = $('#new-stop-value').data("src");        
+        $.get(url, function(data) {
+            $('#new-stop-value')[0].value = parseFloat(data);
+        });
     });
-    
-	$('#new-start-stop').click(function(){        
-		var old_start = parseFloat(document.getElementById('old-start-value').innerText);
-        var old_stop  = parseFloat(document.getElementById('old-stop-value').innerText);
         
+	$('#new-start-stop').click(function(){        
         var new_start = parseFloat(document.getElementById('new-start-value').value);
         var new_stop  = parseFloat(document.getElementById('new-stop-value').value);
         
         var _url = "/api/post/start-stop-temperatures";
         
+        message_box = $('#new-values-status')[0];
+        message_box.innerText = "";
+        
         if (validate_values(new_stop, new_start)){
             // start
-            if (old_start != new_start){
-                $.ajax({	
+                       
+            if (new_start){
+                $.ajax({
                     type: 'POST',
                     data: {
                         command: 'start',
@@ -70,14 +69,13 @@ $('#control-edge-temperatures').ready(function(){
                     url: _url,
                     success: function(msg){
                         // set status
-                        window.console.log("recv: "+msg);
-                        $('#control-status-running').innerHTML = msg;
+                        message_box.innerText += msg + "\n";
                     }
                 });
             }
             
             // stop
-            if (old_stop != new_stop){
+            if (new_stop){
                 $.ajax({	
                     type: 'POST',
                     data: {
@@ -87,11 +85,14 @@ $('#control-edge-temperatures').ready(function(){
                     url: _url,
                     success: function(msg){
                         // set status
-                        window.console.log("recv: "+msg);
-                        $('#new-values-status').innerHTML = msg;
+                        message_box.innerText += msg + " ";
                     }
                 });
             }
         }
+        else {
+            message_box.innerText = "Stop value needs to be smaller then the start value!";
+        }
+        
 	});
 });
