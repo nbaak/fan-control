@@ -37,10 +37,16 @@ app.logger.disabled = True
 # Fan
 fan = Fan(debug = DEBUG)
     
-
+# I choose a thread over a process because it runs the IO Pins plus
+# we ask the object for a lot of informations. A Thread is better with
+# IO and the Process is for Processor intense operations.
 def t_fan_worker():
     global fan
     fan.start()
+    
+@app.route("/api/get/last-run")    
+def api_get_last_run():
+    return str(fan.get_last_run())
     
 @app.route("/api/get/temperature")
 def api_get_temperature():

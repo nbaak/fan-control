@@ -33,6 +33,8 @@ class Fan():
         self.sleep_time = 10
         self.DEBUG = debug
         
+        self.last_run = None
+        
     def setup_gpio(self):
         if not self.pwm:
             self.pwm = RPi_PWM(self.PIN_FAN, self.FREQUENCY, self.PWM_MIN, self.PWM_MAX, self.PWM_MIN)
@@ -46,6 +48,7 @@ class Fan():
             # not running
             if not self.pwm.is_running() and self.current_temperature > self.TEMP_START:
                 self.pwm.start(self.PWM_MIN)   # starts at min speed
+                self.last_run = "running"
                 print (f"{current_time} - fan started")
         
             if self.pwm.is_running():
@@ -61,6 +64,7 @@ class Fan():
                 # stop on low temp
                 if self.current_temperature <= self.TEMP_STOP:
                     self.pwm.stop()
+                    self.last_run = current_time
                     print (f"{current_time} - fan stopped")
             
             if self.DEBUG:
@@ -113,6 +117,8 @@ class Fan():
     def get_start_pwm(self):
         return self.pwm.start_cycle
     
+    def get_last_run(self):
+        return self.last_run
     
     def set_start_temperature(self, temp):
         try:
