@@ -2,9 +2,15 @@
 
 from flask import Flask, render_template, request
 from lib.Fan import Fan
+from lib.Bird import Bird
+from lib.Config import Config
+
 import argparse
 import threading
 import logging
+import time
+import pathlib
+
 
 def str2bool(value):
     if isinstance(value, bool):
@@ -20,10 +26,12 @@ def str2bool(value):
 # Args
 parser = argparse.ArgumentParser(description="Fan Controler")
 parser.add_argument('--debug', dest='DEBUG', type=str2bool, default=True)
+parser.add_argument('--twitter', dest='TWITTER', type=str2bool, default=False)
 
 args = parser.parse_args()
 DEBUG = args.DEBUG
-
+TWITTER = args.TWITTER
+twitter_service = False
   
 # App
 app = Flask(__name__)
@@ -41,12 +49,38 @@ fan = Fan(debug = DEBUG)
 # we ask the object for a lot of informations. A Thread is better with
 # IO and the Process is for Processor intense operations.
 def t_fan_worker():
+    print ("launch fan")
     global fan
     fan.start()
     
+    
+def t_bird():
+    print ("launch bird")
+    
+    current_path = pathlib.Path(__file__).parent.absolute()
+    config = Config(f'{current_path}/config.json')
+    bird = Bird(config.Api_Key, config.Api_Secret, config.Access_Token, config.Access_Token_Secret)
+    
+    while TWITTER:
+        runing = fan.is_fan_running()
+        last_run = fan.get_last_run()
+        temperature = fan.get_current_temperature()
+        
+        message = f"Fan running: {runing}, Current Temperature: {temperature}°C, last run: {last_run}"
+        bird.twitter(message)
+        print (message)
+        
+        time.sleep(30 *60)  # w8 N * 60 sec
+        
+    
+    
 @app.route("/api/get/last-run")    
 def api_get_last_run():
-    return str(fan.get_last_run())
+    last_run = ""
+    for run in fan.get_last_run():
+        last_run += f'<div class="run">{run}</div>'
+        
+    return last_run
     
 @app.route("/api/get/temperature")
 def api_get_temperature():
@@ -109,6 +143,20 @@ def api_post_start_stop_temperatures():
         else:
             return "ERROR"
     
+
+@app.route("/start-twitter")
+def start_twitter():
+    global twitter_service
+    # start service
+    if not twitter_service and TWITTER:
+        t = threading.Thread(target=t_bird)
+        t.start()
+        twitter_service = True
+        return "started"
+    
+    else:
+        return "already started"
+
 
 def start():
     if not fan.is_service_running():        

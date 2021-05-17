@@ -33,7 +33,9 @@ class Fan():
         self.sleep_time = 10
         self.DEBUG = debug
         
-        self.last_run = None
+        self.last_run = []
+        self.current_start = None
+        self.max_last_runs = 5
         
     def setup_gpio(self):
         if not self.pwm:
@@ -48,7 +50,8 @@ class Fan():
             # not running
             if not self.pwm.is_running() and self.current_temperature > self.TEMP_START:
                 self.pwm.start(self.PWM_MIN)   # starts at min speed
-                self.last_run = "running"
+                #self.last_run = "running"
+                self.current_start = current_time
                 print (f"{current_time} - fan started")
         
             if self.pwm.is_running():
@@ -64,7 +67,10 @@ class Fan():
                 # stop on low temp
                 if self.current_temperature <= self.TEMP_STOP:
                     self.pwm.stop()
-                    self.last_run = current_time
+                    self.last_run.append(f"{self.current_start} {current_time}")
+                    if len(self.last_run) > self.max_last_runs:
+                        self.last_run.pop(0) # remove if queue is 'full'
+                    
                     print (f"{current_time} - fan stopped")
             
             if self.DEBUG:
