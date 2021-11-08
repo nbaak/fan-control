@@ -1,5 +1,5 @@
 # Fan Controler
-Shematic to conroll a Fam with the Raspberry Pi. 
+Shematic to conrol a Fam with the Raspberry Pi. 
 
 ## Circuit
 To build the Circut you need a 10k Pull-Down Resistor, a 1.6k Base Resistor for the Transistor, a Transistor and a Diode.
