@@ -1,4 +1,4 @@
-# Fan Controller
+# Fan Controler
 Shematic to conroll a Fam with the Raspberry Pi. 
 
 ## Circuit
@@ -30,6 +30,6 @@ Configure the ports in the App.py File or inside the run-container.sh script to 
 To run the Service, start App.py using `python3 App.py`. I recommend running this servie with Docker or nohup.
 
 ### Docker Usage
-To run the Fan Controll with Docker you can use the pre cooked script `build-contrainer.sh`. It will run the Dockerfile and create an Image for you. Then just use the pre cooked scrpit `run-contrainer.sh` and start it. Maybe you should lookup both scripts if you want to use different ports!
+To run the Fan Control with Docker you can use the pre cooked script `build-contrainer.sh`. It will run the Dockerfile and create an Image for you. Then just use the pre cooked scrpit `run-contrainer.sh` and start it. Maybe you should lookup both scripts if you want to use different ports!
 
 
