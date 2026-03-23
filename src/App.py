@@ -11,7 +11,7 @@ import logging
 def str2bool(value):
     if isinstance(value, bool):
         return value
-    
+
     if value.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
     elif value.lower() in ('no', 'false', 'f', 'n', '0'):
@@ -38,7 +38,7 @@ app.logger.disabled = True
 # Fan
 fan = Fan(debug=DEBUG)
 
-    
+
 # I choose a thread over a process because it runs the IO Pins plus
 # we ask the object for a lot of informations. A Thread is better with
 # IO and the Process is for Processor intense operations.
@@ -46,16 +46,16 @@ def t_fan_worker():
     print ("launch fan")
     global fan
     fan.start()
-        
-    
-@app.route("/api/get/last-run")    
+
+
+@app.route("/api/get/last-run")
 def api_get_last_run():
     last_run = ""
     for run in fan.get_last_run():
         last_run += f'<div class="run">{run}</div>'
-        
+
     return last_run
-    
+
 
 @app.route("/api/get/temperature")
 def api_get_temperature():
@@ -83,7 +83,7 @@ def api_get_fan_status():
 
 
 @app.route("/api/get/pwm", methods=["GET"])
-def api_get_pwm(): 
+def api_get_pwm():
     return str(fan.get_current_pwm_signal())
 
 
@@ -94,27 +94,27 @@ def api_post_pwm():
 
 
 @app.route("/api/post/service", methods=["POST"])
-def api_post_service(): 
+def api_post_service():
     if request.method == "POST":
         command = request.form["command"]
-        
+
         if command == 'start':
             return start()
         elif command == 'stop':
             return stop()
-            
+
         else:
             return 'ERROR'
-        
-        
+
+
 @app.route("/api/post/start-stop-temperatures", methods=["POST"])
 def api_post_start_stop_temperatures():
     if request.method == "POST":
         command = request.form["command"]
         value = request.form["value"]
-        
+
         print (f"command: {command}, value: {value}")
-        
+
         if command == "start":
             fan.set_start_temperature(value)
             return "start temperature updated"
@@ -126,12 +126,12 @@ def api_post_start_stop_temperatures():
 
 
 def start():
-    if not fan.is_service_running(): 
+    if not fan.is_service_running():
         t = threading.Thread(target=t_fan_worker)
         t.start()
-        
+
         return "started"
-        
+
     else:
         return "already running"
 
@@ -143,7 +143,7 @@ def stop():
     else:
         return "not running"
 
-  
+
 @app.route("/")
 def main():
     return render_template("index.html")
