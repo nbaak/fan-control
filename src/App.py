@@ -6,8 +6,6 @@ from lib.Fan import Fan
 import argparse
 import threading
 import logging
-import time
-import pathlib
 
 
 def str2bool(value):
@@ -29,7 +27,6 @@ parser.add_argument('--debug', dest='DEBUG', type=str2bool, default=True)
 args = parser.parse_args()
 DEBUG = args.DEBUG
 
-
 # App
 app = Flask(__name__)
 log = logging.getLogger('werkzeug')
@@ -38,9 +35,9 @@ log.setLevel(logging.ERROR)
 
 app.logger.disabled = True
 
-
 # Fan
-fan = Fan(debug = DEBUG)
+fan = Fan(debug=DEBUG)
+
     
 # I choose a thread over a process because it runs the IO Pins plus
 # we ask the object for a lot of informations. A Thread is better with
@@ -86,7 +83,7 @@ def api_get_fan_status():
 
 
 @app.route("/api/get/pwm", methods=["GET"])
-def api_get_pwm():        
+def api_get_pwm(): 
     return str(fan.get_current_pwm_signal())
 
 
@@ -97,7 +94,7 @@ def api_post_pwm():
 
 
 @app.route("/api/post/service", methods=["POST"])
-def api_post_service():    
+def api_post_service(): 
     if request.method == "POST":
         command = request.form["command"]
         
@@ -129,7 +126,7 @@ def api_post_start_stop_temperatures():
 
 
 def start():
-    if not fan.is_service_running():        
+    if not fan.is_service_running(): 
         t = threading.Thread(target=t_fan_worker)
         t.start()
         
@@ -153,4 +150,4 @@ def main():
 
 
 if __name__ == "__main__":
-    app.run(debug=DEBUG, host = '0.0.0.0', port=8888)
+    app.run(debug=DEBUG, host='0.0.0.0', port=8888)
