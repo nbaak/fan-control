@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  fan:
+    build: .
+    container_name: fan
+    privileged: true
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./src:/fan
+    command: python3.11 /fan/App.py --debug false
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
